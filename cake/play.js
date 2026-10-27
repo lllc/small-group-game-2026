@@ -4,7 +4,7 @@ const $ = (id) => document.getElementById(id);
 let code = null;
 let room = null;
 let me = null;
-let selAvatar = CAKE.AVATARS[0];
+let selAnimal = Math.floor(Math.random() * ANIMALS.length), selColor = DEFAULT_COLOR;
 let pressedFor = -1;
 
 function msg(text) {
@@ -13,11 +13,16 @@ function msg(text) {
 }
 
 function buildAvatars() {
-  $("avatarPick").innerHTML = CAKE.AVATARS.map(a =>
-    `<button class="av-btn ${a === selAvatar ? "sel" : ""}" data-a="${a}">${a}</button>`
-  ).join("");
+  const code = () => selAnimal + "-" + selColor;
+  $("avatarPick").innerHTML =
+    `<div class="big-av av">${avatarSvg(code())}</div>` +
+    `<div class="swatches">${PALETTE.map((c, i) => `<button type="button" class="${i === selColor ? "sel" : ""}" data-c="${i}" aria-label="背景色 ${i + 1}" style="background:${c}"></button>`).join("")}</div>` +
+    `<div class="animals">${ANIMALS.map((x, i) => `<button type="button" class="${i === selAnimal ? "sel" : ""}" data-a="${i}" aria-label="動物 ${i + 1}">${avatarSvg(i + "-" + selColor)}</button>`).join("")}</div>`;
   $("avatarPick").querySelectorAll("button").forEach(b => {
-    b.onclick = () => { selAvatar = b.dataset.a; buildAvatars(); };
+    b.onclick = () => {
+      if (b.dataset.c !== undefined) selColor = +b.dataset.c; else selAnimal = +b.dataset.a;
+      buildAvatars();
+    };
   });
 }
 
@@ -27,7 +32,7 @@ function join() {
   roomRef(code).child("players").transaction(p => {
     p = p || {};
     if (!p[uid] && Object.keys(p).length >= CAKE.MAX_PLAYERS) return; // full, abort
-    p[uid] = { name, avatar: selAvatar, ready: false };
+    p[uid] = { name, avatar: selAnimal + "-" + selColor, ready: false };
     return p;
   }).then(res => {
     if (!res.committed) alert("房間人數已滿，或者未能加入");
@@ -38,7 +43,7 @@ function toggleReady() {
   roomRef(code).child("players/" + uid + "/ready").set(!me.ready);
 }
 
-// phone press: before 0 s it is an early press that ends the round
+// phone press: the time is recorded as is; early (negative) and late (positive) both count
 function press() {
   const cur = room && room.current;
   if (!cur || room.status !== "round" || !me) return;
@@ -46,30 +51,15 @@ function press() {
   pressedFor = cur.n;
   render();
 
-  const t = serverNow();
-  const grab = cur.startAt + CAKE.ROUND_MS;
-  if (t < grab) {
-    roomRef(code).child("current").transaction(c => {
-      if (!c || c.n !== cur.n || c.early) return; // someone was first, or round changed
-      return { ...c, early: { uid, name: me.name, avatar: me.avatar, t } };
-    });
-  } else {
-    roomRef(code).child("presses/" + cur.n + "/" + uid).set(t);
-  }
+  roomRef(code).child("presses/" + cur.n + "/" + uid).set(serverNow());
 }
 
 function myResultText(res, cur) {
-  const grab = cur.startAt + CAKE.ROUND_MS;
   if (!res) return "計算中…";
-  if (res.early) {
-    return res.early.uid === uid
-      ? `你早撳咗 ${fmt(res.early.t - grab)}，本局唔計分`
-      : "本局有人早撳，唔計分";
-  }
   const list = res.ranking || [];
   const idx = list.findIndex(x => x.uid === uid);
   if (idx < 0) return "你今局未撳";
-  return `第 ${idx + 1} 名　${fmt(list[idx].diff)}${idx === 0 ? "　🏆 +1 分" : ""}`;
+  return `第 ${idx + 1} 名　${fmt(list[idx].diff)}${idx === 0 ? "　" + CROWN + "+1 分" : ""}`;
 }
 
 function render() {
@@ -92,7 +82,7 @@ function render() {
   if (status === "lobby") {
     $("lobbyPanel").classList.remove("hidden");
     $("gamePanel").classList.add("hidden");
-    $("myAvatar").textContent = me.avatar;
+    $("myAvatar").innerHTML = avatarSvg(me.avatar);
     $("myName").textContent = me.name;
     $("readyBtn").textContent = me.ready ? "取消準備" : "我準備好";
     $("readyBtn").classList.toggle("on", !!me.ready);
@@ -109,7 +99,7 @@ function render() {
     $("gameInfo").textContent = `第 ${cur.n} 局 / 共 ${rounds} 局`;
     $("pressBtn").disabled = done;
     $("pressBtn").textContent = done ? "已撳 ✓" : "搶！";
-    $("pressHint").textContent = done ? "等待結果…" : "等到 0 秒先撳！早撳會即時結束本局";
+    $("pressHint").textContent = done ? "等待結果…" : "愈接近 0 秒愈好，早撳同遲撳都計";
     $("myResult").textContent = "";
   } else if (status === "result" && cur) {
     const res = room.results && room.results[cur.n];
@@ -117,7 +107,7 @@ function render() {
     $("pressBtn").disabled = true;
     $("pressBtn").textContent = "本局完結";
     $("pressHint").textContent = cur.n >= rounds ? "稍後睇總結果" : "等待下一局";
-    $("myResult").textContent = myResultText(res, cur);
+    $("myResult").innerHTML = myResultText(res, cur);
   } else if (status === "finished") {
     const scores = computeScores(room);
     const all = Object.entries(room.players || {}).map(([u]) => ({ u, s: scores[u] || 0 })).sort((a, b) => b.s - a.s);

@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="config.js"></script>
+<script src="avatars.js"></script>
 <script src="common.js"></script>
 </head>
 <body class="play">
@@ -18,12 +19,12 @@
 <section id="joinPanel" class="panel hidden">
   <h2>加入遊戲</h2>
   <input id="name" maxlength="8" placeholder="寫你個名">
-  <div id="avatarPick" class="avatars"></div>
+  <div id="avatarPick" class="pick"></div>
   <button id="joinBtn" class="big">加入</button>
 </section>
 
 <section id="lobbyPanel" class="panel hidden">
-  <div class="me"><span id="myAvatar"></span><b id="myName"></b></div>
+  <div class="me"><span id="myAvatar" class="av"></span><b id="myName"></b></div>
   <button id="readyBtn" class="big">我準備好</button>
   <p id="lobbyInfo" class="hint"></p>
 </section>

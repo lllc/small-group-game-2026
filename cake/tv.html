@@ -11,6 +11,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="config.js"></script>
+<script src="avatars.js"></script>
 <script src="common.js"></script>
 </head>
 <body>
@@ -35,28 +36,43 @@
   </div>
 </section>
 
-<section id="stage" class="panel hidden">
-  <div id="prep" class="prep"></div>
-  <svg id="clock" class="clock" viewBox="0 0 200 200" style="opacity:0">
-    <circle cx="100" cy="100" r="92" class="face"/>
-    <g id="ticks"></g>
-    <line id="hand" x1="100" y1="100" x2="100" y2="24" class="hand"/>
-    <circle cx="100" cy="100" r="6" class="pin"/>
-  </svg>
-  <div id="status" class="status"></div>
-  <div id="pressed" class="sub"></div>
+<section id="stage" class="panel pstage hidden">
+  <div class="scene" id="scene"></div>
+  <div class="side">
+    <div class="clockwrap">
+      <svg id="clock" class="clock" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="92" class="face"/>
+        <g id="ticks"></g>
+        <line id="hand" x1="100" y1="112" x2="100" y2="24" class="hand"/>
+        <circle cx="100" cy="100" r="6" class="pin"/>
+      </svg>
+      <div id="count" class="count"></div>
+    </div>
+    <div id="status" class="status"></div>
+    <div id="pressed" class="sub"></div>
+  </div>
 </section>
 
-<section id="result" class="panel hidden">
-  <h2 id="resultTitle"></h2>
-  <ol id="ranking" class="ranking"></ol>
-  <button id="nextBtn" class="big">下一局</button>
+<section id="result" class="panel pres hidden">
+  <div class="scene" id="scene2"></div>
+  <div class="resside">
+    <h2 id="resultTitle"></h2>
+    <ol id="ranking" class="ranking"></ol>
+    <button id="nextBtn" class="big">下一局</button>
+  </div>
 </section>
 
 <section id="final" class="panel hidden">
   <h2>總結果</h2>
   <ol id="board" class="ranking"></ol>
 </section>
+
+<footer class="credits">
+  <a href="https://www.flaticon.com/free-icons/crown" title="crown icons" target="_blank" rel="noopener">Crown icons created by Darius Dan - Flaticon</a>
+  <a href="https://www.flaticon.com/free-icons/strawberry-cake" title="strawberry cake icons" target="_blank" rel="noopener">Strawberry cake icons created by Mihimihi - Flaticon</a>
+  <a href="https://www.flaticon.com/free-icons/cake" title="cake icons" target="_blank" rel="noopener">Cake icons created by Magnific - Flaticon</a>
+  <a href="https://www.flaticon.com/free-icons/breakfast" title="breakfast icons" target="_blank" rel="noopener">Breakfast icons created by Magnific - Flaticon</a>
+</footer>
 
 <script src="tv.js"></script>
 </body>

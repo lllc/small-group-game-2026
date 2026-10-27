@@ -1,17 +1,18 @@
 // Shared settings and Firebase helpers for 搶蛋糕
 const CAKE = {
   LEAD_MS: 3000,        // countdown before the round clock starts
-  ROUND_MS: 60000,      // one full clock turn; 0 (60 s) is the grab moment
-  SHOW_FROM: 40,        // clock appears at 40 s
+  ROUND_MS: 20000,      // clock runs from 40 s to 60 s, so a round lasts 20 s
+  CLOCK_START: 40,      // the second hand starts at 40 s
+  FADE_S: 5,            // clock fades out over 5 s, starting at the hide time
+  COUNT_STEPS: 6,       // countdown numbers shown, e.g. 10,9,8,7,6,5
   MAX_PLAYERS: 15,
   DEFAULT_ROUNDS: 3,
-  // round 1: clock hides at 50 s; round 2: 45 s; round 3: 45 s + 120 BPM beat
+  // round 1: fades from 50 s (10..5); round 2: from 45 s (15..10); round 3: like round 1 + 120 BPM beat
   ROUND_RULES: [
     { hide: 50, beat: false },
     { hide: 45, beat: false },
-    { hide: 45, beat: true }
+    { hide: 50, beat: true }
   ],
-  AVATARS: ["🍰", "🐶", "🐱", "🐼", "🦊", "🐸", "🐵", "🦁", "🐯", "🐻", "🐰", "🐨", "🐙", "🦄", "🐳"],
   rule(n) {
     return CAKE.ROUND_RULES[Math.min(n - 1, CAKE.ROUND_RULES.length - 1)];
   }
@@ -63,3 +64,8 @@ function computeScores(room) {
   });
   return s;
 }
+
+// small inline avatar picture for a stored avatar code
+function avHtml(code) { return '<span class="av">' + avatarSvg(code) + "</span>"; }
+const CROWN = '<img class="crown" alt="" src="img/crown.png">';
+const CAKE_IMG = (n) => "img/cake-" + Math.min(Math.max(n, 1), 3) + ".png";
