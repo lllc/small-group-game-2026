@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>搶蛋糕 · 主持</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cake.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="config.js"></script>
+<script src="common.js"></script>
+</head>
+<body>
+<header class="top">
+  <h1>搶蛋糕</h1>
+  <a href="../index.html" style="color:var(--muted);font-size:20px;text-decoration:none">← 返回小遊戲</a>
+  <div id="roundInfo"></div>
+  <div>房間 <b id="roomCode">----</b></div>
+</header>
+
+<section id="lobby" class="panel hidden">
+  <div class="qrbox">
+    <div id="qr"></div>
+    <p>掃 QR 加入</p>
+    <small id="joinUrl"></small>
+  </div>
+  <div class="playersbox">
+    <div class="pc">玩家 <b id="playerCount">0 / 15</b></div>
+    <div id="players" class="players"></div>
+    <button id="startBtn" class="big" disabled>開始遊戲</button>
+    <p id="startHint" class="hint"></p>
+  </div>
+</section>
+
+<section id="stage" class="panel hidden">
+  <div id="prep" class="prep"></div>
+  <svg id="clock" class="clock" viewBox="0 0 200 200" style="opacity:0">
+    <circle cx="100" cy="100" r="92" class="face"/>
+    <g id="ticks"></g>
+    <line id="hand" x1="100" y1="100" x2="100" y2="24" class="hand"/>
+    <circle cx="100" cy="100" r="6" class="pin"/>
+  </svg>
+  <div id="status" class="status"></div>
+  <div id="pressed" class="sub"></div>
+</section>
+
+<section id="result" class="panel hidden">
+  <h2 id="resultTitle"></h2>
+  <ol id="ranking" class="ranking"></ol>
+  <button id="nextBtn" class="big">下一局</button>
+</section>
+
+<section id="final" class="panel hidden">
+  <h2>總結果</h2>
+  <ol id="board" class="ranking"></ol>
+</section>
+
+<script src="tv.js"></script>
+</body>
+</html>

@@ -1,1 +1,4 @@
 .idea
+node_modules
+cake-game/cake/config.js
+cake-game/*.md

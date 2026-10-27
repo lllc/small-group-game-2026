@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>搶蛋糕</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cake.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="config.js"></script>
+<script src="common.js"></script>
+</head>
+<body class="play">
+<div id="msg" class="msg hidden"></div>
+
+<section id="joinPanel" class="panel hidden">
+  <h2>加入遊戲</h2>
+  <input id="name" maxlength="8" placeholder="寫你個名">
+  <div id="avatarPick" class="avatars"></div>
+  <button id="joinBtn" class="big">加入</button>
+</section>
+
+<section id="lobbyPanel" class="panel hidden">
+  <div class="me"><span id="myAvatar"></span><b id="myName"></b></div>
+  <button id="readyBtn" class="big">我準備好</button>
+  <p id="lobbyInfo" class="hint"></p>
+</section>
+
+<section id="gamePanel" class="panel hidden">
+  <div id="gameInfo" class="sub"></div>
+  <button id="pressBtn" class="press">搶！</button>
+  <p id="pressHint" class="hint"></p>
+  <div id="myResult" class="big-text"></div>
+</section>
+
+<script src="play.js"></script>
+</body>
+</html>

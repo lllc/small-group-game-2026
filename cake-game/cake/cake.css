@@ -1,0 +1,63 @@
+:root {
+  --bg: #0d1b17; --panel: #163028; --panel-2: #1f3f35;
+  --ink: #f7f3e8; --muted: #a9c2b8; --gold: #f2c14e; --ok: #6fd08c; --bad: #ff6b5b;
+  --font: "Noto Sans TC", "PingFang HK", "Microsoft JhengHei", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font-family: var(--font); }
+button { font: inherit; color: inherit; border: 0; cursor: pointer; }
+button:disabled { opacity: .4; cursor: default; }
+.hidden { display: none !important; }
+.msg { padding: 40px; font-size: 26px; text-align: center; }
+.panel { padding: 28px 36px; }
+h2 { font-size: clamp(36px, 4.5vw, 60px); font-weight: 900; margin: 0 0 20px; text-align: center; }
+.big { background: var(--gold); color: #1a1405; font-size: 32px; font-weight: 900; padding: 18px 40px; border-radius: 20px; }
+.hint { color: var(--muted); font-size: 22px; text-align: center; }
+.sub { color: var(--muted); font-size: 26px; text-align: center; }
+
+/* TV */
+.top { display: flex; justify-content: space-between; align-items: center; padding: 18px 36px; background: var(--panel); font-size: 28px; gap: 24px; flex-wrap: wrap; }
+.top h1 { margin: 0; font-size: 44px; font-weight: 900; }
+#lobby { display: grid; grid-template-columns: minmax(260px, 1fr) 2fr; gap: 40px; align-items: start; }
+.qrbox { text-align: center; font-size: 26px; background: var(--panel); border-radius: 28px; padding: 24px; }
+.qrbox canvas, .qrbox img { background: #fff; padding: 12px; border-radius: 12px; }
+.qrbox small { color: var(--muted); word-break: break-all; font-size: 18px; }
+.playersbox { display: flex; flex-direction: column; gap: 20px; }
+.pc { font-size: 30px; }
+.players { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.pl { background: var(--panel); border-radius: 18px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 24px; }
+.pl.ready { box-shadow: inset 0 0 0 3px var(--ok); }
+.pl .av { font-size: 52px; }
+.pl .rd { font-size: 18px; color: var(--muted); }
+#stage { display: flex; flex-direction: column; align-items: center; gap: 18px; min-height: 80vh; justify-content: center; }
+.clock { width: min(70vh, 80vw); height: min(70vh, 80vw); }
+.face { fill: var(--panel); stroke: var(--gold); stroke-width: 4; }
+.tick { stroke: var(--muted); stroke-width: 2; }
+.tick.big { stroke: var(--ink); stroke-width: 4; }
+.lbl { fill: var(--ink); font-size: 14px; font-weight: 700; text-anchor: middle; }
+.hand { stroke: var(--gold); stroke-width: 5; stroke-linecap: round; }
+.pin { fill: var(--gold); }
+.prep { font-size: clamp(120px, 22vh, 220px); font-weight: 900; color: var(--gold); min-height: 1em; }
+.status { font-size: clamp(48px, 7vh, 90px); font-weight: 900; min-height: 1.2em; color: var(--gold); text-align: center; }
+#result, #final { max-width: 1000px; margin: 0 auto; }
+.ranking { list-style: none; padding: 0; font-size: clamp(26px, 3vw, 40px); display: flex; flex-direction: column; gap: 12px; }
+.ranking li { background: var(--panel); border-radius: 16px; padding: 14px 22px; display: flex; gap: 16px; align-items: center; }
+.ranking li.miss { opacity: .5; }
+.ranking li b { margin-left: auto; }
+#result .big, #final .big { display: block; margin: 30px auto 0; }
+
+/* Phone */
+.play .panel { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
+.play input { font-size: 30px; padding: 14px 18px; border-radius: 14px; border: 0; width: min(90vw, 420px); text-align: center; background: var(--panel); color: var(--ink); }
+.avatars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; width: min(90vw, 460px); }
+.av-btn { background: var(--panel); font-size: 40px; padding: 10px; border-radius: 14px; }
+.av-btn.sel { box-shadow: inset 0 0 0 4px var(--gold); }
+.me { display: flex; align-items: center; gap: 14px; font-size: 34px; }
+.me span { font-size: 64px; }
+#readyBtn.on { background: var(--ok); }
+.press { width: min(88vw, 520px); height: min(88vw, 520px); border-radius: 50%; background: var(--bad); color: #2a0b06; font-size: 72px; font-weight: 900; box-shadow: 0 12px 0 #8c2f25; }
+.press:active { transform: translateY(6px); box-shadow: 0 6px 0 #8c2f25; }
+.press:disabled { background: var(--panel-2); color: var(--muted); box-shadow: none; }
+.big-text { font-size: clamp(32px, 7vw, 56px); font-weight: 900; text-align: center; min-height: 1.4em; color: var(--gold); }
+
+@media (max-width: 800px) { #lobby { grid-template-columns: 1fr; } }
