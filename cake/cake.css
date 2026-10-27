@@ -63,7 +63,7 @@ h2 { font-size: clamp(36px, 4.5vw, 60px); font-weight: 900; margin: 0 0 20px; te
 .tbl { position: absolute; left: 20%; top: 21%; width: 60%; height: 58%; border-radius: 50%;
   background: radial-gradient(ellipse at 50% 38%, #b0713f 0%, #8e5832 72%);
   box-shadow: 0 0 0 calc(var(--u) * .9) #6a4025, 0 calc(var(--u) * 2.2) calc(var(--u) * 4) rgba(0, 0, 0, .55); }
-.cake { position: absolute; left: 50%; top: 50%; width: calc(var(--u) * 19); transform: translate(-50%, -50%);
+.cake { z-index: 5; position: absolute; left: 50%; top: 50%; width: calc(var(--u) * 19); transform: translate(-50%, -50%);
   transition: left .9s cubic-bezier(.3, .9, .3, 1), top .9s cubic-bezier(.3, .9, .3, 1); }
 .cake img { width: 100%; height: auto; display: block; filter: drop-shadow(0 calc(var(--u) * .8) calc(var(--u) * .9) rgba(0, 0, 0, .4)); }
 .seat { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * .6); transition: opacity .3s; }
@@ -72,13 +72,11 @@ h2 { font-size: clamp(36px, 4.5vw, 60px); font-weight: 900; margin: 0 0 20px; te
   box-shadow: 0 0 0 calc(var(--u) * .5) rgba(0, 0, 0, .3); transition: box-shadow .2s, transform .2s; }
 .seat .nm { background: rgba(0, 0, 0, .5); padding: calc(var(--u) * .3) calc(var(--u) * 1.3); border-radius: 999px;
   font-size: calc(var(--u) * 2.4); font-weight: 700; white-space: nowrap; max-width: calc(var(--w) * 11); overflow: hidden; text-overflow: ellipsis; }
-.seat .tag { position: absolute; right: -14%; top: -14%; font-style: normal; font-size: calc(var(--av) * .42); line-height: 1; display: none; }
+.seat .tag { z-index: 5; position: absolute; right: -14%; top: -14%; font-style: normal; font-size: calc(var(--av) * .42); line-height: 1; display: none; }
 .seat.pressed .tag { display: block; }
 .seat.pressed .tag::before { content: "\270B"; }
 .seat.winner .av { box-shadow: 0 0 0 calc(var(--u) * 1) var(--gold), 0 0 calc(var(--u) * 4) var(--gold); transform: scale(1.12); }
-.seat.winner .tag { display: block; }
-.seat.winner .tag { width: calc(var(--av) * .62); height: calc(var(--av) * .62); right: -18%; top: -24%; background: url(img/crown.png) center / contain no-repeat; }
-.seat.winner .tag::before { content: none; }
+.seat.winner .tag { display: none; }
 .seat.dim { opacity: .5; }
 
 /* wall clock */
