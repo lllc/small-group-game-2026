@@ -585,8 +585,8 @@
           </select>
           方式
           <select id="sFloatMode">
-            <option value="walk">靜止</option>
-            <option value="wobble" selected>浮動</option>
+            <option value="walk" selected>靜止</option>
+            <option value="wobble">浮動</option>
           </select>
         </div>
         <button id="sRestart" class="ghost">重新開始</button>
@@ -681,13 +681,6 @@
           <option value="2">2 行</option>
           <option value="3">3 行</option>
           <option value="4" selected>4 行</option>
-        </select>
-        節拍數
-        <select id="bTotal" aria-label="節拍數">
-          <option value="16">16 拍</option>
-          <option value="32" selected>32 拍</option>
-          <option value="64">64 拍</option>
-          <option value="0">無限</option>
         </select>
         模式
         <select id="bMode" aria-label="模式">
@@ -1316,8 +1309,10 @@
             tone(ch.arp[(beat + 1) % 3] * 2, 0.12, "triangle", 0.03);
         }
 
+        function goalBeats() { return Number($("bRows").value) * 5; }
+
         function onBeat() {
-          const goal = Number($("bTotal").value);
+          const goal = goalBeats();
           if (goal && B.count >= goal) {
             finish();
             return;
@@ -1374,7 +1369,7 @@
           B.seqIdx = 0;
           B.finished = false;
           $("bDone").textContent = 0;
-          $("bGoal").textContent = Number($("bTotal").value) || "∞";
+          $("bGoal").textContent = goalBeats();
           $("bWord").textContent = "撳「開始」";
           $("bStart").textContent = "開始";
           showNumber(0);
@@ -1387,7 +1382,7 @@
           const fresh = B.count === 0;
           B.running = true;
           $("bStart").textContent = "暫停";
-          $("bGoal").textContent = Number($("bTotal").value) || "∞";
+          $("bGoal").textContent = goalBeats();
           if (fresh) onBeat();
           B.timer = setInterval(onBeat, 60000 / Number($("bpm").value));
         }
@@ -1418,12 +1413,10 @@
         });
 
         $("bRows").addEventListener("change", () => {
-          if (!B.running && B.count === 0) placeholder();
-        });
-
-        $("bTotal").addEventListener("change", () => {
-          if (!B.running && B.count === 0)
-            $("bGoal").textContent = Number($("bTotal").value) || "∞";
+          if (!B.running && B.count === 0) {
+              placeholder(); 
+              $("bGoal").textContent = goalBeats();
+          } 
         });
 
         placeholder();
