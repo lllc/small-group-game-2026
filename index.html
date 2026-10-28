@@ -402,8 +402,8 @@
         min-height: 80px;
       }
       .st-slot {
-        min-width: 110px;
-        height: 80px;
+        min-width: 140px;
+        height: 140px;
         padding: 0 14px;
         border-radius: 16px;
         background: var(--panel-2);
@@ -1104,14 +1104,14 @@
           $("stBar").classList.remove("run");
           $("stStage").classList.remove("hit", "miss");
           const w = $("stWord");
-          w.textContent = "小休息";
+          w.textContent = "答題";
           w.style.color = "";
           $("stSlots").innerHTML = ST.recallSeq
             .map((_, i) => `<div class="st-slot">${i + 1}</div>`)
             .join("");
           setStBtn("Show Ans", true);
           $("stNote").textContent =
-            `請一位參加者由第一個開始，講出最近 ${n} 題嘅顏色（按次序）。講完撳「Show Ans」。`;
+            `講出最近 ${n} 題嘅顏色（按次序）。講完撳「Show Ans」。`;
         }
 
         // show the correct sequence, large, each in its own colour
