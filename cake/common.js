@@ -9,9 +9,9 @@ const CAKE = {
   DEFAULT_ROUNDS: 3,
   // round 1: fades from 50 s (10..5); round 2: from 45 s (15..10); round 3: like round 1 + 120 BPM beat
   ROUND_RULES: [
-    { hide: 50, beat: false },
-    { hide: 45, beat: false },
-    { hide: 50, beat: true }
+    { hide: 50, beat: true },
+    { hide: 45, beat: true },
+    { hide: 45, beat: false }
   ],
   rule(n) {
     return CAKE.ROUND_RULES[Math.min(n - 1, CAKE.ROUND_RULES.length - 1)];
