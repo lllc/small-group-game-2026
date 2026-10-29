@@ -187,6 +187,82 @@
         display: none !important;
       }
 
+      /* ---------- Schulte levels ---------- */
+      .s-panel {
+        flex: 1;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 48px;
+        text-align: center;
+      }
+      #schulte[data-phase="levels"] #sLevels,
+      #schulte[data-phase="ready"] #sReady {
+        display: flex;
+      }
+      #schulte:not([data-phase="play"]) .stats,
+      #schulte:not([data-phase="play"]) #sCtrlBar,
+      #schulte:not([data-custom="1"]) #sCtrlBar,
+      #schulte:not([data-phase="play"]) .board-wrap,
+      #schulte:not([data-phase="play"]) #sNote {
+        display: none !important;
+      }
+      .s-howto {
+        font-size: clamp(30px, 4vw, 56px);
+        font-weight: 700;
+        margin: 0;
+      }
+      .s-levels {
+        display: flex;
+        gap: clamp(20px, 4vw, 64px);
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .level-btn {
+        background: var(--panel);
+        color: var(--ink);
+        border: 0;
+        border-radius: 20px;
+        font-size: clamp(30px, 3.6vw, 52px);
+        font-weight: 800;
+        padding: 28px clamp(36px, 5vw, 80px);
+        cursor: pointer;
+      }
+      .level-btn:hover {
+        background: var(--panel-2);
+      }
+      .level-btn small {
+        display: block;
+        font-size: 0.4em;
+        font-weight: 500;
+        margin-top: 8px;
+        opacity: 0.85;
+      }
+      #sBigStart {
+        font-size: clamp(40px, 5vw, 72px);
+        padding: 32px 90px;
+        border-radius: 24px;
+      }
+
+      /* ---------- Beat levels ---------- */
+      #beat[data-phase="levels"] #bLevels,
+      #beat[data-phase="ready"] #bReady {
+        display: flex;
+      }
+      #beat:not([data-phase="play"]) .stats,
+      #beat:not([data-phase="play"]) #bCtrlBar,
+      #beat:not([data-phase="play"]) .stage,
+      #beat:not([data-phase="play"]) .hint,
+      #beat .b-settings {
+        display: none !important;
+      }
+      #bBigStart {
+        font-size: clamp(40px, 5vw, 72px);
+        padding: 32px 90px;
+        border-radius: 24px;
+      }
+
       /* ---------- Schulte ---------- */
       .board-wrap {
         flex: 1;
@@ -560,16 +636,34 @@
     </section>
 
     <!-- ========== SCHULTE ========== -->
-    <section id="schulte" class="screen" aria-label="舒爾特方格">
+    <section
+      id="schulte"
+      class="screen"
+      aria-label="舒爾特方格"
+      data-phase="levels"
+      data-custom="0"
+    >
       <div class="bar">
-        <button class="back" data-home>← 返回</button>
+        <button class="back" id="sBack">← 返回</button>
         <div class="stats">
           <div>剩餘 <b id="sTime">60</b> 秒</div>
           <div>下一個 <b id="sNext">1</b></div>
           <div>完成組數 <b id="sRounds">0</b></div>
         </div>
       </div>
-      <div class="bar">
+      <div class="s-panel" id="sLevels">
+        <p class="s-howto">玩法：按 1 至 36 順序找出方格，限時60秒</p>
+        <div class="s-levels">
+          <button class="level-btn" data-level="1">Level 1</button>
+          <button class="level-btn" data-level="2">Level 2</button>
+          <button class="level-btn" data-level="3">Level 3</button>
+          <button class="level-btn" data-level="custom">Custom Level</button>
+        </div>
+      </div>
+      <div class="s-panel" id="sReady">
+        <button class="primary" id="sBigStart">開始</button>
+      </div>
+      <div class="bar" id="sCtrlBar">
         <div class="controls">
           動態打亂
           <select id="sShuffle">
@@ -660,14 +754,37 @@
     </section>
 
     <!-- ========== BEAT ========== -->
-    <section id="beat" class="screen" aria-label="跟拍手勢">
+    <section
+      id="beat"
+      class="screen"
+      aria-label="跟拍手勢"
+      data-phase="levels"
+    >
       <div class="bar">
-        <button class="back" data-home>← 返回</button>
+        <button class="back" id="bBack">← 返回</button>
         <div class="stats">
           <div>已跟 <b id="bDone">0</b> / <b id="bGoal">32</b> 拍</div>
         </div>
       </div>
-      <div class="controls">
+      <div class="s-panel" id="bLevels">
+        <p class="s-howto">玩法：跟住節拍，睇畫面數字出手指</p>
+        <div class="s-levels">
+          <button class="level-btn" data-blevel="1">
+            Level 1<small>80 BPM</small>
+          </button>
+          <button class="level-btn" data-blevel="2">
+            Level 2<small>95 BPM</small>
+          </button>
+          <button class="level-btn" data-blevel="3">
+            Level 3<small>110 BPM</small>
+          </button>
+        </div>
+      </div>
+      <div class="s-panel" id="bReady">
+        <button class="primary" id="bBigStart">開始</button>
+      </div>
+      <div class="controls" id="bCtrlBar">
+        <span class="b-settings" style="display: contents">
         速度
         <input
           type="range"
@@ -675,7 +792,7 @@
           min="40"
           max="140"
           value="80"
-          step="2"
+          step="1"
           aria-label="速度"
         />
         <b id="bpmVal" style="color: var(--ink)">80</b> BPM 行數
@@ -692,6 +809,7 @@
         </select>
         <label><input type="checkbox" id="bSound" checked /> 節拍聲</label>
         <label><input type="checkbox" id="bBgm" checked /> 背景音樂</label>
+        </span>
         <button id="bRestart" class="ghost" style="margin-left: auto">
           重新開始
         </button>
@@ -719,6 +837,9 @@
           stopBeat();
           resetBeat();
           stopStroop();
+          $("sResult").classList.add("hidden");
+          if (id === "schulte") setSPhase("levels");
+          if (id === "beat") $("beat").dataset.phase = "levels";
           screens.forEach((s) => s.classList.toggle("active", s.id === id));
         }
         document
@@ -731,7 +852,11 @@
           .forEach((b) => b.addEventListener("click", () => show("home")));
         document.addEventListener("keydown", (e) => {
           if (e.key === "Escape") show("home");
-          if (e.key === " " && $("beat").classList.contains("active")) {
+          if (
+            e.key === " " &&
+            $("beat").classList.contains("active") &&
+            $("beat").dataset.phase === "play"
+          ) {
             e.preventDefault();
             toggleBeat();
           }
@@ -877,6 +1002,41 @@
             .addEventListener("click", () => show("home"));
           $("sNote").textContent = "";
         }
+
+        /* ----- Schulte levels ----- */
+        const S_LEVELS = {
+          1: { shuffle: "0", float: "0", mode: "walk" },
+          2: { shuffle: "0", float: "0", mode: "wobble" },
+          3: { shuffle: "20000", float: "0", mode: "wobble" },
+          custom: { shuffle: "0", float: "0", mode: "walk" },
+        };
+        function setSPhase(ph) {
+          $("schulte").dataset.phase = ph;
+        }
+        document.querySelectorAll("[data-level]").forEach((b) =>
+          b.addEventListener("click", () => {
+            const L = S_LEVELS[b.dataset.level];
+            $("schulte").dataset.custom =
+              b.dataset.level === "custom" ? "1" : "0";
+            $("sShuffle").value = L.shuffle;
+            $("sFloat").value = L.float;
+            $("sFloatMode").value = L.mode;
+            S.pos = {};
+            setSPhase("ready");
+          }),
+        );
+        $("sBigStart").addEventListener("click", () => {
+          setSPhase("play");
+          startSchulte();
+        });
+        $("sBack").addEventListener("click", () => {
+          if ($("schulte").dataset.phase === "levels") show("home");
+          else {
+            stopSchulte();
+            $("sResult").classList.add("hidden");
+            setSPhase("levels");
+          }
+        });
 
         $("sStart").addEventListener("click", () => {
           if (S.running) pauseSchulte();
@@ -1420,6 +1580,35 @@
               placeholder(); 
               $("bGoal").textContent = goalBeats();
           } 
+        });
+
+        /* ----- Beat levels ----- */
+        const B_LEVELS = { 1: 80, 2: 95, 3: 110 };
+        const setBPhase = (ph) => ($("beat").dataset.phase = ph);
+        document.querySelectorAll("[data-blevel]").forEach((b) =>
+          b.addEventListener("click", () => {
+            $("bpm").value = B_LEVELS[b.dataset.blevel];
+            $("bpmVal").textContent = $("bpm").value;
+            $("bRows").value = "4";
+            $("bMode").value = "rand";
+            $("bSound").checked = true;
+            $("bBgm").checked = true;
+            stopBeat();
+            resetBeat();
+            setBPhase("ready");
+          }),
+        );
+        $("bBigStart").addEventListener("click", () => {
+          setBPhase("play");
+          startBeat();
+        });
+        $("bBack").addEventListener("click", () => {
+          if ($("beat").dataset.phase === "levels") show("home");
+          else {
+            stopBeat();
+            resetBeat();
+            setBPhase("levels");
+          }
         });
 
         placeholder();
