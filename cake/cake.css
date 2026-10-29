@@ -20,9 +20,14 @@ h2 { font-size: clamp(36px, 4.5vw, 60px); font-weight: 900; margin: 0 0 20px; te
 /* TV */
 .top { display: flex; justify-content: space-between; align-items: center; padding: calc(var(--u) * 1.7) calc(var(--u) * 3.4); background: var(--panel); font-size: calc(var(--u) * 2.6); gap: 24px; flex-wrap: wrap; }
 .top h1 { margin: 0; font-size: calc(var(--u) * 4.1); font-weight: 900; }
-#lobby { display: grid; grid-template-columns: minmax(260px, 1fr) 2fr; gap: 40px; align-items: start; }
+#lobby { display: grid; grid-template-columns: minmax(320px, 1fr) 1fr; gap: 40px; align-items: start; }
 .qrbox { text-align: center; font-size: 26px; background: var(--panel); border-radius: 28px; padding: 24px; }
-.qrbox canvas, .qrbox img { background: #fff; padding: 12px; border-radius: 12px; }
+.qrbox { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+#qr { width: 100%; display: flex; justify-content: center; }
+#qr canvas, #qr img { box-sizing: border-box; width: min(100%, calc(100vh - 340px)) !important; height: auto !important; aspect-ratio: 1; background: #fff; padding: 16px; border-radius: 16px; }
+#qr img[style*="display: none"] { display: none !important; }
+.qrbox p { margin: 0; font-size: 34px; font-weight: 700; }
+.qrbox small { text-align: center; }
 .qrbox small { color: var(--muted); word-break: break-all; font-size: 18px; }
 .playersbox { display: flex; flex-direction: column; gap: 20px; }
 .pc { font-size: 30px; }
@@ -38,6 +43,7 @@ h2 { font-size: clamp(36px, 4.5vw, 60px); font-weight: 900; margin: 0 0 20px; te
 .ranking li.miss { opacity: .5; }
 .ranking li b { margin-left: auto; }
 #result .big, #final .big { display: block; margin: 30px auto 0; }
+#final .big + .hint { margin-top: 12px; }
 
 /* Phone */
 .play .panel { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }

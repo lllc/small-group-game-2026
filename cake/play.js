@@ -94,6 +94,7 @@ function render() {
   $("joinPanel").classList.add("hidden");
 
   if (status === "lobby") {
+    pressedFor = -1; // a new game starts at round 1 again
     $("lobbyPanel").classList.remove("hidden");
     $("gamePanel").classList.add("hidden");
     $("myAvatar").innerHTML = avatarSvg(me.avatar);
@@ -133,7 +134,7 @@ function render() {
     $("gameInfo").textContent = "總結果";
     $("pressBtn").disabled = true;
     $("pressBtn").textContent = "遊戲完結";
-    $("pressHint").textContent = "";
+    $("pressHint").textContent = "等主持再開一場，唔使重新掃 QR";
     $("myResult").textContent = `你得 ${scores[uid] || 0} 分，排第 ${rank} 名`;
   }
 }

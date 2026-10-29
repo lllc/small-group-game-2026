@@ -262,7 +262,7 @@ function joinTv() {
   const url = new URL("play.html", location.href);
   url.search = "?room=" + code;
   $("joinUrl").textContent = url.href;
-  new QRCode($("qr"), { text: url.href, width: 220, height: 220 });
+  new QRCode($("qr"), { text: url.href, width: 640, height: 640 });
   buildTicks();
 
   roomRef(code).on("value", s => { room = s.val(); render(); });
@@ -271,6 +271,17 @@ function joinTv() {
 
   $("startBtn").onclick = startGame;
   $("nextBtn").onclick = nextRound;
+  $("againBtn").onclick = playAgain;
+}
+
+// same room, same players: wipe the finished game and go back to the lobby
+function playAgain() {
+  const players = {};
+  Object.entries(room.players || {}).forEach(([u, p]) => {
+    players[u] = { ...p, ready: false };
+  });
+  beatN = -1; beatK = 0;
+  roomRef(code).set({ status: "lobby", rounds: room.rounds || CAKE.DEFAULT_ROUNDS, players });
 }
 
 initCake(() => {
