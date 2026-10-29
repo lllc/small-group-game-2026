@@ -46,12 +46,20 @@ h2 { font-size: clamp(36px, 4.5vw, 60px); font-weight: 900; margin: 0 0 20px; te
 #final .big + .hint { margin-top: 12px; }
 
 /* Phone */
-.play .panel { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
+/* phone: one fixed screen, no page scroll, no tap delay / zoom */
+html:has(body.play), body.play { height: 100vh; height: 100dvh; overflow: hidden; overscroll-behavior: none; }
+body.play { touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.play .panel { height: 100vh; height: 100dvh; min-height: 0; overflow-y: auto; padding: max(12px, env(safe-area-inset-top)) 16px max(12px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(8px, 2dvh, 22px); }
+.play .panel > * { flex: none; }
+.play h2 { margin: 0; font-size: clamp(28px, 5dvh, 44px); }
+.play .msg { padding: 24px; }
+.net { position: fixed; top: 0; left: 0; right: 0; z-index: 10; background: var(--bad); color: #2a0b06; font-weight: 700; font-size: 18px; text-align: center; padding: 6px; }
 .play input { font-size: 30px; padding: 14px 18px; border-radius: 14px; border: 0; width: min(90vw, 420px); text-align: center; background: var(--panel); color: var(--ink); }
 .me { display: flex; align-items: center; gap: 14px; font-size: 34px; }
 .me .av { width: 84px; height: 84px; }
 #readyBtn.on { background: var(--ok); }
-.press { width: min(88vw, 520px); height: min(88vw, 520px); border-radius: 50%; background: var(--bad); color: #2a0b06; font-size: 72px; font-weight: 900; box-shadow: 0 12px 0 #8c2f25; }
+.press { --s: min(88vw, 52vh, 520px); width: var(--s); height: var(--s); border-radius: 50%; background: var(--bad); color: #2a0b06; font-size: min(72px, 18vw); font-weight: 900; box-shadow: 0 12px 0 #8c2f25; touch-action: none; }
+@supports (height: 1dvh) { .press { --s: min(88vw, 52dvh, 520px); } }
 .press:active { transform: translateY(6px); box-shadow: 0 6px 0 #8c2f25; }
 .press:disabled { background: var(--panel-2); color: var(--muted); box-shadow: none; }
 .big-text { font-size: clamp(32px, 7vw, 56px); font-weight: 900; text-align: center; min-height: 1.4em; color: var(--gold); }
@@ -139,3 +147,13 @@ h2 { font-size: clamp(36px, 4.5vw, 60px); font-weight: 900; margin: 0 0 20px; te
 .credits { position: fixed; left: 0; right: 0; bottom: 0; padding: 4px 16px; font-size: 12px; line-height: 1.4; color: var(--muted); text-align: center; display: flex; flex-wrap: wrap; gap: 2px 16px; justify-content: center; pointer-events: none; }
 .credits a { color: inherit; text-decoration: none; pointer-events: auto; }
 .credits a:hover { text-decoration: underline; }
+
+/* short phone screens: tighten the join screen so it still fits without scrolling */
+@media (max-height: 700px) {
+  .play .panel { gap: 8px; }
+  .pick { gap: 8px; }
+  .pick .big-av { width: 80px; height: 80px; }
+  .play input { font-size: 24px; padding: 8px 14px; }
+  .play .big { font-size: 26px; padding: 12px 32px; }
+  .swatches button { width: 32px; height: 32px; }
+}

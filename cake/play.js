@@ -8,6 +8,11 @@ let selAnimal = Math.floor(Math.random() * ANIMALS.length),
   selColor = DEFAULT_COLOR;
 let pressedFor = -1;
 
+function setText(id, t) {
+  const el = $(id);
+  if (el.textContent !== t) el.textContent = t;
+}
+
 function msg(text) {
   $("msg").textContent = text;
   $("msg").classList.remove("hidden");
@@ -58,14 +63,25 @@ function toggleReady() {
 // phone press: the time is recorded as is; early (negative) and late (positive) both count
 function press() {
   const cur = room && room.current;
-  if (!cur || room.status !== "round" || !me) return;
+  if (!cur || room.status !== "round" || !me) {
+    // screen looks like a live round but our data is stale (e.g. phone slept): resync and say so
+    setText("pressHint", "同步緊，請等一等再撳…");
+    try { db.goOnline(); } catch (e) {}
+    return;
+  }
   if (pressedFor === cur.n) return;
+  const t = serverNow(); // timestamp taken at the moment of the tap
   pressedFor = cur.n;
   render();
 
   roomRef(code)
     .child("presses/" + cur.n + "/" + uid)
-    .set(serverNow());
+    .set(t)
+    .catch(() => {
+      pressedFor = -1; // not sent: let the player tap again
+      render();
+      setText("pressHint", "未能送出，請再撳一次");
+    });
 }
 
 function myResultText(res, cur) {
@@ -112,10 +128,10 @@ function render() {
 
   if (status === "round" && cur) {
     const done = pressedFor === cur.n;
-    $("gameInfo").textContent = `第 ${cur.n} 局 / 共 ${rounds} 局`;
+    setText("gameInfo", `第 ${cur.n} 局 / 共 ${rounds} 局`);
     $("pressBtn").disabled = done;
-    $("pressBtn").textContent = done ? "已撳 ✓" : "搶！";
-    $("pressHint").textContent = done ? "等待結果…" : "愈接近 0 秒愈好";
+    setText("pressBtn", done ? "已撳 ✓" : "搶！");
+    setText("pressHint", done ? "等待結果…" : "愈接近 0 秒愈好");
     $("myResult").textContent = "";
   } else if (status === "result" && cur) {
     const res = room.results && room.results[cur.n];
@@ -148,7 +164,23 @@ function start() {
   buildAvatars();
   $("joinBtn").onclick = join;
   $("readyBtn").onclick = toggleReady;
-  $("pressBtn").onclick = press;
+  // fire on touch-down (not on release) so a slightly sliding finger still counts
+  $("pressBtn").addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    press();
+  });
+  $("pressBtn").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); press(); }
+  });
+  db.ref(".info/connected").on("value", (s) =>
+    $("net").classList.toggle("hidden", !!s.val()),
+  );
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      try { db.goOnline(); } catch (e) {}
+      roomRef(code).once("value").then((s) => { if (s.val()) { room = s.val(); render(); } });
+    }
+  });
   roomRef(code).on("value", (s) => {
     room = s.val();
     if (!room) {

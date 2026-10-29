@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>搶蛋糕 · 手機試玩</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cake.css">
+</head>
+<body class="play">
+<!-- Practice page: same layout and press button as play.html, but no Firebase and no room needed -->
+<section id="gamePanel" class="panel">
+  <div id="gameInfo" class="sub">試玩模式（唔使房間）</div>
+  <button id="pressBtn" class="press">開始</button>
+  <p id="pressHint" class="hint">撳「開始」，20 秒後愈接近 0 秒愈好</p>
+  <div id="myResult" class="big-text"></div>
+  <p id="diag" class="hint" style="font-size:16px"></p>
+</section>
+<script>
+const $ = (id) => document.getElementById(id);
+const ROUND = 20000;
+let state = "idle", t0 = 0, timer = null;
+
+function fmt(ms) { return (ms >= 0 ? "+" : "") + (ms / 1000).toFixed(2) + " 秒"; }
+
+function diag() {
+  const de = document.documentElement;
+  const scrolls = de.scrollHeight > de.clientHeight + 1 || de.scrollWidth > de.clientWidth + 1;
+  $("diag").textContent =
+    `螢幕 ${innerWidth}×${innerHeight}　${scrolls ? "⚠ 頁面會 scroll" : "✓ 唔會 scroll"}　${"ontouchstart" in window ? "觸控" : "滑鼠"}`;
+}
+
+function start() {
+  state = "running";
+  t0 = Date.now() + 3000;            // 3 s countdown, then the 20 s round
+  $("myResult").textContent = "";
+  $("pressBtn").textContent = "搶！";
+  $("pressBtn").disabled = false;
+  $("gameInfo").textContent = "試玩：第 1 局 / 共 1 局";
+  $("pressHint").textContent = "愈接近 0 秒愈好";
+  timer = setInterval(() => {
+    if (Date.now() > t0 + ROUND + 3000) finish(null);
+  }, 200);
+}
+
+function finish(diff) {
+  clearInterval(timer);
+  state = "done";
+  $("pressBtn").disabled = true;
+  $("pressBtn").textContent = "已撳 ✓";
+  $("gameInfo").textContent = "試玩結果";
+  $("myResult").textContent = diff === null ? "你未撳" : fmt(diff);
+  $("pressHint").textContent = "";
+  setTimeout(() => {
+    state = "idle";
+    $("pressBtn").disabled = false;
+    $("pressBtn").textContent = "再試一次";
+    $("pressHint").textContent = "撳「再試一次」重新開始";
+  }, 1500);
+}
+
+// same trigger as the real game: fire on touch-down
+$("pressBtn").addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  if (state === "idle") { start(); return; }
+  if (state !== "running") return;
+  finish(Date.now() - (t0 + ROUND));   // 0 = exactly at the end of the 20 s
+});
+addEventListener("resize", diag);
+diag();
+</script>
+</body>
+</html>
